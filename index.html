@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>neto.AI </title>
+<link rel="stylesheet" href="index.css">
+  
+<style> 
+body {
+      background: #181818;
+      color: #f1f1f1;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #lala {
+      max-width: 1000px;
+      height: 600px;
+      margin: 40px auto;
+      background: #212121;
+      border-radius: 12px;
+    
+      padding: 24px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #00e0a8;
+    }
+    #chat {
+      background: transparent;
+      border-radius: 8px;
+      min-height: 200px;
+      max-height: 550px;
+      height: 400px;
+      overflow-y: auto;
+      padding: 12px;
+      margin-bottom: 18px;
+     
+    }
+    .msg {
+      margin: 8px 0;
+      padding: 8px 12px;
+      border-radius: 8px;
+      max-width: 90%;
+      word-break: break-word;
+    }
+    .user {
+      background: #373737;
+      color: #181818;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+    .bot {
+      background: transparent;
+      color: #f1f1f1;
+      align-self: flex-start;
+      margin-right: auto;
+    }
+    #input-area {
+      display: flex;
+      gap: 8px;
+    }
+    #da {
+      flex: 1;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #222;
+      color: #fff;
+      font-size: 1em;
+    }
+    #enviar {
+      background: #00e0a8;
+      color: #181818;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 18px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #enviar:disabled {
+      background: #555;
+      cursor: not-allowed;
+    }</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+<div id="lala">
+  <h1>Olá, bem-vindo ao neto.AI!</h1>
+  <div id="chat"></div>
+  <div id="input-area">
+    <input type="text" id="da" placeholder="Digite sua pergunta..." autocomplete="off">
+    <button id="enviar" onclick="enviarPergunta()">Enviar</button>
+  </div>
+</div>
+
+<script>
+const chatDiv = document.getElementById('chat');
+const input = document.getElementById('da');
+const btn = document.getElementById('enviar');
+
+function addMsg(text, cls) {
+  const msg = document.createElement('div');
+  msg.className = 'msg ' + cls;
+  msg.innerText = text;
+  chatDiv.appendChild(msg);
+  chatDiv.scrollTop = chatDiv.scrollHeight;
+}
+
+async function enviarPergunta() {
+  const pergunta = input.value.trim();
+  if (!pergunta) return;
+  addMsg(pergunta, 'user');
+  input.value = '';
+  btn.disabled = true;
+  addMsg('Pensando...', 'bot');
+  try {
+    const resp = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({prompt: pergunta})
+    });
+    const data = await resp.json();
+    // Remove o "Pensando..."
+    chatDiv.removeChild(chatDiv.lastChild);
+    addMsg(data.resposta, 'bot');
+  } catch (e) {
+    chatDiv.removeChild(chatDiv.lastChild);
+    addMsg('Erro ao conectar ao servidor.', 'bot');
+  }
+  btn.disabled = false;
+  input.focus();
+}
+
+// Enviar com Enter
+input.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') enviarPergunta();
+});</script>
+
+</script>
+</body>
+</html>
