@@ -25,7 +25,7 @@ class GeminiClient:
             return f"Erro ao chamar a API: {e}"
 
 app = Flask(__name__)
-gemini_client = GeminiClient("AIzaSyAsegb98WWAxWFGEWSaO9MS6xG4z-49hVg")
+gemini_client = GeminiClient("")
 
 @app.route('/')
 def index():
@@ -40,5 +40,6 @@ def chat():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
 
 
