@@ -11,7 +11,7 @@ class GeminiClient:
         self.model = model
         genai.configure(api_key=api_key)
 
-    def generate(self, prompt: str, temperature: float = 0.2, max_output_tokens: int = 1024) -> str:
+    def generate(self, prompt: str, temperature: float = 0.2, max_output_tokens: int = 500024) -> str:
         try:
             response = genai.GenerativeModel(self.model).generate_content(
                 prompt,
@@ -25,7 +25,7 @@ class GeminiClient:
             return f"Erro ao chamar a API: {e}"
 
 app = Flask(__name__)
-gemini_client = GeminiClient("sua")
+gemini_client = GeminiClient("AIzaSyAsegb98WWAxWFGEWSaO9MS6xG4z-49hVg")
 
 @app.route('/')
 def index():
@@ -40,4 +40,5 @@ def chat():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
 
